@@ -31,7 +31,7 @@ public class Fichaje {
     @JoinColumn(name = "id_equipo", nullable = false)
     private Equipo equipo;
 
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 9)
     private String temporada;
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal precio;

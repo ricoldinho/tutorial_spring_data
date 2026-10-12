@@ -56,7 +56,6 @@ TutorialClase/
     └── test/
         └── java/edu/rico/tutorial/
             └── TutorialClaseApplicationTests.java  # Pruebas de carga de contexto
-```text
 
 ## Configuración properties
 

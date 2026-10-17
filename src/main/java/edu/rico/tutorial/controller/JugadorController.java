@@ -1,31 +1,44 @@
 package edu.rico.tutorial.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.rico.tutorial.entity.Jugador;
-import edu.rico.tutorial.repository.IJugadorRepository;
+import edu.rico.tutorial.entity.dtos.JugadorDetalleDTO;
+import edu.rico.tutorial.entity.dtos.JugadorListadoDTO;
+import edu.rico.tutorial.service.JugadorService;
 
 @RestController
-@RequestMapping("/jugadores")
+@RequestMapping("/api/jugadores")
 public class JugadorController {
 
     @Autowired
-    private IJugadorRepository jugadorRepository;
+    private JugadorService jugadorService;
 
-    @GetMapping("/all")
-    public List<Jugador> encontrarJugadores() {
-        return jugadorRepository.findAll();
+    // Endpoint 1: Listado general
+    // GET http://localhost:8080/api/jugadores
+    @GetMapping
+    public ResponseEntity<List<JugadorListadoDTO>> listarTodos() {
+        List<JugadorListadoDTO> jugadores = jugadorService.listarTodos();
+        return ResponseEntity.ok(jugadores);
     }
 
+    // Endpoint 2: Detalle por ID
+    // GET http://localhost:8080/api/jugadores/{id}
     @GetMapping("/{id}")
-    public Jugador encontrarJugadorPorId(@PathVariable Long id) {
-        return jugadorRepository.findById(id).orElse(null);
-    }
+    public ResponseEntity<JugadorDetalleDTO> obtenerPorId(@PathVariable Long id) {
+        Optional<JugadorDetalleDTO> jugadorOpt = jugadorService.obtenerPorId(id);
 
+        if (jugadorOpt.isPresent()) {
+            return ResponseEntity.ok(jugadorOpt.get());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 }
